@@ -17,18 +17,21 @@ export class PersonsController {
     return this.personsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.personsService.findOne(+id);
+  @Get(':name')
+  findOne(@Param('name') name: string) {
+    return this.personsService.findOne(name);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
-    return this.personsService.update(+id, updatePersonDto);
+  @Patch(':name')
+  update(
+    @Param('name') name: string,
+    @Body() updatePersonDto: UpdatePersonDto,
+  ) {
+    return this.personsService.update(name, updatePersonDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.personsService.remove(+id);
+  @Delete(':name')
+  remove(@Param('name') name: string) {
+    return this.personsService.remove(name);
   }
 }

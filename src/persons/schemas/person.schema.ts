@@ -10,7 +10,7 @@ export class Person {
   name: string;
 
   @Prop()
-  year: number;
+  year: string;
 }
 
 export const PersonSchema = SchemaFactory.createForClass(Person);

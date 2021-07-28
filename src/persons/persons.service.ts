@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
+import { Person, PersonDocument } from './schemas/person.schema';
 
 @Injectable()
 export class PersonsService {
-  create(createPersonDto: CreatePersonDto) {
-    return 'This action adds a new person';
+  // inject the constructor here
+  constructor(
+    @InjectModel(Person.name) private personModel: Model<PersonDocument>,
+  ) {}
+
+  async create(createPersonDto: CreatePersonDto): Promise<Person> {
+    return new this.personModel(createPersonDto).save();
   }
 
-  findAll() {
-    return `This action returns all persons`;
+  async findAll() {
+    return this.personModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} person`;
+  async findOne(name: string) {
+    return this.personModel.findOne({ name }).exec();
   }
 
-  update(id: number, updatePersonDto: UpdatePersonDto) {
-    return `This action updates a #${id} person`;
+  async update(name: string, updatePersonDto: UpdatePersonDto) {
+    return this.personModel
+      .updateOne({ name }, { $set: { ...updatePersonDto } })
+      .exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} person`;
+  async remove(name: string) {
+    return this.personModel.remove({ name }).exec();
   }
 }
